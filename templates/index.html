@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+	<h1>Liste over danske kafferisterier.</h1>
+	<article class="intro">
+		<p>Kunne ikke finde en liste, så jeg lavede en.</p>
+		<p>Hvis der er nogen af jer der kender andre, drop mig en <a href="mailto:me@ulrik.co">mail</a> så den kan komme på listen.</p>
+		<p>- ulrik 26/8 '15</p>
+	</article>
+	{% for item in shops %}
+
+	<article>
+		<h2><a href="{{ item.url }}" target="_blank">{{ item.name }}</a></h2>
+		<address><a href="https://www.google.dk/maps/place/{{ item.address|url_encode }},dk" target="_blank">{{ item.address }}</a></address>
+		<span style="background-image:url(https://maps.googleapis.com/maps/api/streetview?size=640x200&location={{ item.address|url_encode }},dk&fov=90&heading=235&pitch=10)"></span>
+	</article>
+	{% endfor %}
+
+{% endblock %}
