@@ -130,6 +130,26 @@ $app->get('/', function () use ($app) {
             'url' => 'http://www.noerresnedekafferisteri.dk/',
             'address' => 'Strøget 8, 8766 Nørre Snede',
         ],
+        [
+            'name' => 'emofabrik',
+            'url' => 'http://emofabrik.dk/',
+            'address' => 'Søren Frichsvej 22 DK-8000 Århus C ',
+        ],
+        [
+            'name' => "Buchwald's Kafferisteri",
+            'url' => 'http://buchwalds.dk/',
+            'address' => 'Skansevej 8 A 3700 Rønne',
+        ],
+        [
+            'name' => 'kaffeagenterne',
+            'url' => 'http://kaffeagenterne.dk/',
+            'address' => 'Mysundevej 10, DK-8930 Randers NØ',
+        ],
+        [
+            'name' => 'Zozozial coffee',
+            'url' => 'http://zozozialcoffee.dk/',
+            'address' => 'Vestergade 24 5700 Svendborg',
+        ],
     ];
 
     usort($shops, function($a, $b) {
