@@ -13,7 +13,7 @@
 		<h2><a href="{{ item.url }}" target="_blank">{{ item.name }}</a></h2>
 		<address><a href="https://www.google.dk/maps/place/{{ item.address|url_encode }},dk" target="_blank">{{ item.address }}</a></address>
 		<div class="credit">Tak til: {{ item.thanks|default('Google') }}</div>
-		<span style="background-image:url(https://maps.googleapis.com/maps/api/streetview?size=640x200&location={{ item.address|url_encode }},dk&fov=90&heading=235&pitch=10)"></span>
+		<span style="background-image:url(https://maps.googleapis.com/maps/api/streetview?size=640x200&amp;location={{ item.address|url_encode }},dk&amp;fov=90&amp;heading=235&amp;pitch=10)"></span>
 	</article>
 {% endfor %}
 	<footer>
