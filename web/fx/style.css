@@ -41,8 +41,20 @@ article span {
 .intro a {
 	color: #ccc;
 }
+.credit {
+	text-align: right;
+	margin-top: 5px;
+	font-size: 0.8em;
+}
 article div {
 	padding-left: 20px;
+}
+
+footer {
+	margin: 20px;
+	padding: 10px;
+	clear: left;
+	display: block;
 }
 
 @media all and (min-width: 700px) {
