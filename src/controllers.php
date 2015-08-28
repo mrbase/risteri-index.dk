@@ -15,6 +15,7 @@ $app->get('/', function () use ($app) {
             'url' => 'http://www.greatcoffee.dk/',
             'address' => 'Klostergade 32, Aarhus C',
             'added' => '2015-08-26 12:00:00',
+            'thanks' => 'Michael',
         ],
         [
             'name' => 'KONTRA Coffee',
