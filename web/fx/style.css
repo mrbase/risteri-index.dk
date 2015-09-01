@@ -44,7 +44,6 @@ article span {
 }
 .intro {
 	color: #fff;
-	height: 215px;
 }
 .intro span {
 	opacity: 0.8;
@@ -72,6 +71,23 @@ footer {
 	padding: 10px;
 	clear: left;
 	display: block;
+}
+
+select  {
+    outline: 0;
+    overflow: hidden;
+    height: 30px;
+    border: 1px solid #fff;
+    padding: 5px 3px 5px 10px;
+    background: transparent;
+    color: #fff;
+}
+select option {
+	padding: 5px;
+}
+
+.hidden {
+	display: none;
 }
 
 @media all and (min-width: 700px) {

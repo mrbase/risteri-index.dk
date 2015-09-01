@@ -13,6 +13,8 @@
 </head>
 <body>
 {% block content %}{% endblock %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
+<script>(function($) {$(document).on('change', 'select', function() {var s = $(this).find(':selected').val();if ('' == s) {$('article.item').removeClass('hidden');$('footer span').text($('article.item:visible').length);return;}$('article.item').addClass('hidden');$('[data-area='+s+']').removeClass('hidden');$('footer span').text($('article.item:visible').length);});})(jQuery);</script>
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

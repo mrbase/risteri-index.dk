@@ -5,11 +5,22 @@
 		<p>Kunne ikke finde en liste, så jeg lavede en.</p>
 		<p>Listen er forbeholdt små risterier, der går op i at leverer en god oplevelse til alle os kaffeelskere.</p>
 		<p>Hvis der er nogen af jer der kender andre - eller selv er et, så drop mig en <a href="mailto:me@ulrik.co">mail</a>, så listen kan blive opdateret.</p>
-		<p class="credit">- Ulrik 28/8 '15</p>
+		<p class="credit">- Ulrik 1/9 '15</p>
 		<span></span>
 	</article>
-{% for item in shops %}
 	<article>
+		<label>
+			Område filter:
+			<select>
+				<option value="">Vis alle</option>
+				{% for k,v in tags %}
+				<option value="{{ k }}">{{ v }}</option>
+				{% endfor %}
+			</select>
+		</label>
+	</article>
+{% for item in shops %}
+	<article data-area="{{ item.tags[0] }}" class="item">
 		<h2><a href="{{ item.url }}" target="_blank">{{ item.name }}</a></h2>
 		<address><a href="https://www.google.dk/maps/place/{{ item.address|url_encode }},dk" target="_blank">{{ item.address }}</a></address>
 		<div class="credit">Tak til: {{ item.thanks|default('Google') }}</div>
@@ -17,6 +28,6 @@
 	</article>
 {% endfor %}
 	<footer>
-		pt. {{ shops|length }} risterier på listen.
+		pt. <span>{{ shops|length }}</span> risterier på listen.
 	</footer>
 {% endblock %}
