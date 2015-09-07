@@ -20,7 +20,8 @@
         "symfony/security": "~2.3",
         "symfony/translation": "~2.3",
         "symfony/twig-bridge": "~2.3",
-        "symfony/validator": "~2.3"
+        "symfony/validator": "~2.3",
+        "neutron/mongo-odm-silex-provider": "0.1.*"
     },
     "autoload": {
         "psr-0": { "": "src/" }
