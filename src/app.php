@@ -27,14 +27,12 @@ $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     return $twig;
 }));
 
-
 $app->register(new HttpFragmentServiceProvider());
-
 
 // MongoDB
 $app->register(new MongoDBODMServiceProvider(), [
     'doctrine.odm.mongodb.connection_options' => [
-        'database' => 'risteri_index',
+        'database' => 'roasters',
         'host'     => 'mongodb://localhost:27017',
         'options'  => ['fsync' => false]
     ],
@@ -56,6 +54,10 @@ $app->register(new MongoDBODMServiceProvider(), [
     'doctrine.odm.mongodb.auto_generate_hydrators' => true,
     'doctrine.odm.mongodb.metadata_cache'          => new \Doctrine\Common\Cache\ArrayCache(),
     'doctrine.odm.mongodb.logger_callable'         => $app->protect(function($query) use ($app) {
+        if (empty($app['monolog'])) {
+            return;
+        }
+
         $app['monolog']->debug('MongoDB query.', $query);
     }),
 ]);
