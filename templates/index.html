@@ -18,16 +18,22 @@
 				{% endfor %}
 			</select>
 		</label>
+        <label class="js-by-distance hidden">
+            <a href="#">Sorter efter afstand</a>
+        </label>
 	</article>
-{% for item in shops %}
-	<article data-area="{{ item.tags[0] }}" class="item">
-		<h2><a href="{{ item.url }}" target="_blank">{{ item.name }}</a></h2>
-		<address><a href="https://www.google.dk/maps/place/{{ item.address|url_encode }},dk" target="_blank">{{ item.address }}</a></address>
-		<div class="credit">Tak til: {{ item.thanks|default('Google') }}</div>
-		<span style="background-image:url(https://maps.googleapis.com/maps/api/streetview?size=640x200&amp;location={{ item.address|url_encode }},dk&amp;fov=90&amp;heading=235&amp;pitch=10)"></span>
-	</article>
-{% endfor %}
-	<footer>
-		pt. <span>{{ shops|length }}</span> risterier på listen.
+
+    <section id="roasters">
+        {% include 'roaster-list.html.twig' %}
+    </section>
+
+    <footer>
+		pt. <span>{{ roasters|length }}</span> risterier på listen.
 	</footer>
 {% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script>var _baseUrl='{{ app.request.baseurl }}';(function($){$(document).on('change','select',function(){var s=$(this).find(':selected').val();if(''==s){$('article.item').removeClass('hidden');$('footer span').text($('article.item:visible').length);return;}$('article.item').addClass('hidden');$('[data-area='+s+']').removeClass('hidden');$('footer span').text($('article.item:visible').length);});})(jQuery);</script>
+    <script>if ("geolocation" in navigator) {$('.js-by-distance').removeClass('hidden');$('.js-by-distance a').on('click', function(e) {e.preventDefault();var s = function(pos) {var payload = {lat: pos.coords.latitude, lon: pos.coords.longitude};$.get(_baseUrl+'/geo-sort', payload, function(response) {$('#roasters').html(response);});};navigator.geolocation.getCurrentPosition(s);});}</script>
+{% endblock javascript %}
