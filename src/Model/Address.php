@@ -132,6 +132,6 @@ class Address extends BaseAddress
      */
     public function __toString()
     {
-        return $this->getAddressLine1().' '.$this->getPostalCode().' '.$this->getLocality();
+        return $this->getAddressLine1().', '.$this->getPostalCode().' '.$this->getLocality();
     }
 }

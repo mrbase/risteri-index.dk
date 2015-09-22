@@ -1,0 +1,12 @@
+{% for item in feed %}
+    {% if item.message is defined %}
+    <div class="fb-item">
+        <time><a href="https://www.facebook.com/{{ item.id }}">{{ item.created_time|date('Y-m-d H:i') }}</a></time>
+
+        {% if item.picture is defined and item.picture %}
+            <img src="{{ item.picture }}">
+        {% endif %}
+        <p>{{ item.message|linkify('facebook', item)|nl2br }}</p>
+    </div>
+    {% endif %}
+{% endfor %}

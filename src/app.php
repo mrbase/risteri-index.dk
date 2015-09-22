@@ -24,6 +24,55 @@ $app->register(new TwigServiceProvider());
 $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     // add custom globals, filters, tags, ...
 
+    $filter = new Twig_SimpleFilter('toUrl', function($url, $type) {
+        switch ($type) {
+            case 'facebook':
+                return 'https://www.facebook.com/'.$url;
+            case 'twitter':
+                return 'https://wwww.twitter.com/'.$url;
+            case 'instagram':
+                return 'https://instagram.com/'.$url;
+        }
+
+        return $url;
+    });
+
+    $twig->addFilter($filter);
+
+    $filter = new Twig_SimpleFilter('linkify', function($text, $type = 'generic', $context = []) {
+        $text = preg_replace(
+            '/(https?:\/\/\S+)/',
+            '<a href="\1" target="_blank">\1</a>',
+            $text
+        );
+
+        $tagReplaceUrl = '';
+
+        if ('facebook' === $type) {
+            $tagReplaceUrl = 'https://www.facebook.com/hashtag/\2?source=feed_text&story_id=:id:';
+        }
+
+        if ($tagReplaceUrl) {
+            // linkify tags
+            $text = preg_replace(
+                '/(^|\s)#(\w+)/u',
+                '\1<a href="'.$tagReplaceUrl.'" target="_blank">#\2</a>',
+                $text
+            );
+
+            foreach ($context as $key => $value) {
+                $context[':'.$key.':'] = $value;
+                unset($context[$key]);
+            }
+
+            $text = strtr($text, $context);
+        }
+
+        return $text;
+    }, ['is_safe' => ['html']]);
+
+    $twig->addFilter($filter);
+
     return $twig;
 }));
 
@@ -62,5 +111,11 @@ $app->register(new MongoDBODMServiceProvider(), [
     }),
 ]);
 
+// use cache service in prod mode.
+if (false === $app['debug']) {
+    $app->register(new Silex\Provider\HttpCacheServiceProvider(), [
+        'http_cache.cache_dir' => $app['cache_dir'].'/',
+    ]);
+}
 
 return $app;

@@ -1,98 +1,133 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Roboto;
+}
+a, a:link, a:hover {
+    color: #fff;
+}
+/*
 body {
-	margin: 0;
-	padding: 20px;
-	font-family: verdana, sans-serif;
-    font-size: 14px;
-    background-color: #51423F;
-    color: #fff;
-    background-image: url(bg.jpg);
+    padding-top: 230px;
+}
+header {
+    width: 100%;
+    position: fixed;
+    top:0;
+    z-index: 200;
+}
+*/
+header, footer {
+    background: url(bg.jpg) no-repeat center bottom fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
+    text-align: center;
+    color: #fff;
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
-h1 {
-	margin: 0 0 10px 0;
-	font-family: 'Covered By Your Grace', cursive;
-	font-size: 4em;
+header h2 {
+    font-family: Lobster;
+    font-size: 5em;
+    margin-bottom: 0;
+    margin-top: 10px;
 }
-h2 {
-	margin: 0 0 10px 0;
-}
-a {
-	color: #fff;
-}
-article {
-	margin: 20px;
-	padding: 10px;
-	position: relative;
-	border: 5px solid #fff;
-	border-radius: 10px;
-}
-article span {
-	background-color: #51423F;
-	background-repeat: no-repeat;
-	background-size: cover;
-	position: absolute;
-	display: block;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	opacity: 0.5;
-    z-index: -1;
-}
-.description {
-	margin-top: 10px;
-}
-.intro {
-	color: #fff;
-}
-.intro span {
-	opacity: 0.8;
-}
-.intro a {
-	color: #ccc;
-}
-.credit {
-	text-align: right;
-	margin-top: 5px;
-	font-size: 0.8em;
-}
-p.credit {
-	position: absolute;
-	bottom: 0;
-	right: 10px;
-	font-size: 1em;
-}
-article div {
-	padding-left: 20px;
-}
-
-footer {
-	margin: 20px;
-	padding: 10px;
-	clear: left;
-	display: block;
-}
-
-select  {
-    outline: 0;
+header nav {
     overflow: hidden;
-    height: 30px;
-    border: 1px solid #fff;
-    padding: 5px 3px 5px 10px;
-    background: transparent;
+}
+header nav ul {
+    display: inline-block;
+    overflow: hidden;
+    margin: auto 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+header nav ul li {
+    float: left;
+    margin: 1px;
+}
+header nav ul li a,
+header nav ul li a:link {
+    background-color: #fff;
+    opacity: 0.7;
+    color: #000;
+    font-weight: bold;
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+}
+header nav ul li a:hover {
+    opacity: 0.85;
+    text-decoration: none;
+    color: #000;
+}
+.google-maps {
+    height: 300px;
+}
+.google-maps.full {
+    height: 800px;
+}
+.google-maps .gm-style-iw p.right {
+    text-align: right;
+}
+.google-maps .gm-style-iw p.right a {
+    color: #000;
+    text-decoration: underline;
+}
+.roasters {
+    padding-left: 0;
+    padding-right: 0;
+    border-left: none;
+    border-right: none;
+}
+.roasters .navbar {
+    border-radius: 0;
+    margin: 0;
+    margin-top: 5px;
+}
+.roasters .list {
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.roasters .item {
+    height: 170px;
+    float: left;
+    padding: 10px;
+}
+.js-by-distance label {
+    cursor: pointer;
+}
+.item .wrapper {
+    height: 150px;
+    padding: 10px;
+    background-color: rgba(81, 66, 63, 0.88);
     color: #fff;
 }
-select option {
-	padding: 5px;
+.item .wrapper h2 {
+    font-family: Lobster;
+    margin-top: 0;
+    padding-top: 0;
+}
+.item .credit {
+    text-align: right;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+.item .credit a {
+    color: #fff;
+    text-decoration: underline;
 }
 
-.hidden {
-	display: none;
+footer a {
+    text-decoration: underline;
 }
 
-@media all and (min-width: 700px) {
-  article {
-        width: 40%;
-        float:left;
-  }
+@media (max-width: 750px) {
+    header h2 {
+        font-size: 3em;
+    }
 }

@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+
+{% block headers %}
+    <h2>Danske kafferisterier</h2>
+    <h3>- fordelt på et kort</h3>
+{% endblock %}
+
+{% block content %}
+    <section class="container-fluid google-maps full" id="map-container"></section>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+
+    <script>
+        var map;
+        var roasters = [
+        {% for roaster in roasters %}
+            {name: '{{ roaster.name }}', lat: {{ roaster.address.coordinates.lat }}, lon: {{ roaster.address.coordinates.lon }}, address: '{{ roaster.address|replace({', ': '<br>'})|raw }}', url: '{{ roaster.url }}'}{% if loop.last %}{% else %},{% endif %}
+
+        {% endfor %}
+        ];
+
+        function initMap() {
+            var styles = [{featureType: "all", stylers: [{ saturation: -80 }]},{featureType: "road.arterial", elementType: "geometry", stylers: [{ hue: "#422518" }, { saturation: 50 }]},{featureType: "poi.business", elementType: "labels", stylers: [{ visibility: "off" }]}];
+            var styledMap = new google.maps.StyledMapType(styles, {name: "Styled Map"});
+            map = new google.maps.Map(document.getElementById('map-container'), {disableDefaultUI: true, scrollwheel: false, zoomControl: true, mapTypeControl: true, scaleControl: true, streetViewControl: true, rotateControl: true, mapTypeId: [google.maps.MapTypeId.ROADMAP, 'map_style']});
+            map.mapTypes.set('map_style', styledMap);
+            map.setMapTypeId('map_style');
+            var bounds = new google.maps.LatLngBounds();
+            $.each(roasters, function(i, roaster) {
+                var text = '<h4>'+roaster.name+'</h4><p>'+roaster.address+'</p><p class="right"><a href="'+roaster.url+'" target="_blank">website</a></p>';
+                var point = new google.maps.LatLng(roaster.lat, roaster.lon);
+                bounds.extend(point);
+                var infowindow = new google.maps.InfoWindow({content: text, position: point});
+                var marker = new google.maps.Marker({position: point, map: map});
+                google.maps.event.addListener(marker, 'click', function () {infowindow.open(map, marker);});
+            });
+            map.fitBounds(bounds);
+            map.setZoom(6);
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCN83anDeWz_fgD8_k8z-yW6chHPX8C-Vw&callback=initMap&language=da"></script>
+{% endblock %}
