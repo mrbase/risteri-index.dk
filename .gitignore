@@ -1,3 +1,5 @@
 /vendor/
 composer.lock
 /.idea/
+/config/dev.php
+/config/prod.php
