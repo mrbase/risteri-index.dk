@@ -29,7 +29,7 @@ $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
             case 'facebook':
                 return 'https://www.facebook.com/'.$url;
             case 'twitter':
-                return 'https://wwww.twitter.com/'.$url;
+                return 'https://twitter.com/'.$url;
             case 'instagram':
                 return 'https://instagram.com/'.$url;
         }
@@ -47,9 +47,20 @@ $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
         );
 
         $tagReplaceUrl = '';
+        $userReplaceUrl = '';
 
         if ('facebook' === $type) {
             $tagReplaceUrl = 'https://www.facebook.com/hashtag/\2?source=feed_text&story_id=:id:';
+        }
+
+        if ('instagram' === $type) {
+            $tagReplaceUrl = 'https://instagram.com/explore/tags/\2';
+            $userReplaceUrl = 'https://instagram.com/\2';
+        }
+
+        if ('twitter' === $type) {
+            $tagReplaceUrl = 'https://twitter.com/search?q=%23\2';
+            $userReplaceUrl = 'https://twitter.com/\2';
         }
 
         if ($tagReplaceUrl) {
@@ -68,6 +79,16 @@ $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
             $text = strtr($text, $context);
         }
 
+        if ($userReplaceUrl) {
+            // linkify tags
+            $text = preg_replace(
+                '/(^|\s)@(\w+)/u',
+                '\1<a href="'.$userReplaceUrl.'" target="_blank">@\2</a>',
+                $text
+            );
+        }
+
+
         return $text;
     }, ['is_safe' => ['html']]);
 
@@ -81,8 +102,8 @@ $app->register(new HttpFragmentServiceProvider());
 // MongoDB
 $app->register(new MongoDBODMServiceProvider(), [
     'doctrine.odm.mongodb.connection_options' => [
-        'database' => 'roasters',
-        'host'     => 'mongodb://localhost:27017',
+        'database' => $app['r.mongodb.database'],
+        'host'     => $app['r.mongodb.host'],
         'options'  => ['fsync' => false]
     ],
     'doctrine.odm.mongodb.documents' => [

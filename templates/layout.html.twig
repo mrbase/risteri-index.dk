@@ -17,6 +17,7 @@
 
     <title>DK Roasters</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
     <link href="/fx/style.css" rel="stylesheet" type="text/css">
@@ -27,7 +28,7 @@
         <ul>
             <li><a href="{{ path('home') }}">Forside</a></li>
             <li><a href="{{ path('map') }}">Kort</a></li>
-            <li><a href="">Om os</a></li>
+            <li><a href="{{ path('about') }}">Om os</a></li>
         </ul>
     </nav>
     {% block headers %}

@@ -6,17 +6,9 @@ html, body {
 a, a:link, a:hover {
     color: #fff;
 }
-/*
 body {
-    padding-top: 230px;
+    padding-bottom: 120px;
 }
-header {
-    width: 100%;
-    position: fixed;
-    top:0;
-    z-index: 200;
-}
-*/
 header, footer {
     background: url(bg.jpg) no-repeat center bottom fixed;
     -webkit-background-size: cover;
@@ -32,6 +24,9 @@ header h2 {
     font-family: Lobster;
     font-size: 5em;
     margin-bottom: 0;
+    margin-top: 10px;
+}
+header address {
     margin-top: 10px;
 }
 header nav {
@@ -122,6 +117,57 @@ header nav ul li a:hover {
     text-decoration: underline;
 }
 
+.social {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+.social h3 {
+    clear: both;
+}
+.social .item {
+    padding: 5px;
+    height: auto;
+    overflow: hidden;
+}
+.social .item .wrapper {
+    display: flex;
+    align-items: flex-start;
+    background-color: #fff;
+    border: 1px solid silver;
+    border-right: none;
+    border-bottom: none;
+    color: #000;
+    height: auto;
+}
+.social .item .wrapper .img {
+    width: 140px;
+}
+.social.instagram .wrapper img {
+    padding-right: 10px;
+}
+.social .item .wrapper p {
+    flex: 1;
+}
+.social time {
+    display: block;
+    margin-bottom: 5px;
+}
+.social .item a {
+    color: #000;
+    text-decoration: underline;
+}
+.about li a,
+.about p a {
+    color: #000;
+    text-decoration: underline;
+}
+footer {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    width:100%;
+}
 footer a {
     text-decoration: underline;
 }

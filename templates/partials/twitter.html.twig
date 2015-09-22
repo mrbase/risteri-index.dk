@@ -1,0 +1,17 @@
+{% for item in feed %}
+{% if loop.first %}
+<h3 class="container-fluid">Seneste {{ loop.length }} Tweets</h3>
+<section class="container-fluid social twitter">
+{% endif %}
+    <article class="item col-md-6">
+        <div class="wrapper">
+            <p>
+                <time><a href="{{ item.link }}">{{ item.created_time|date('Y-m-d H:i') }}</a></time>
+                {{ item.text|linkify('twitter')|nl2br }}
+            </p>
+        </div>
+    </article>
+{% if loop.last %}
+</section>
+{% endif %}
+{% endfor %}

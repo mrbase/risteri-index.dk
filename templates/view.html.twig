@@ -1,37 +1,98 @@
 {% extends 'layout.html.twig' %}
 
+{% block headers %}
+    <h2>{{ roaster.name }}</h2>
+    <address>
+        <p>{{ roaster.address|replace({', ':'<br>'})|raw }}</p>
+    </address>
+    <p>
+    {% if roaster.establishedAt %}
+        Stiftet: {{ roaster.establishedAt('Y-m-d') }}<br>
+    {% endif %}
+    {% if roaster.invalidatedAt %}
+        Ophørt: {{ roaster.invalidatedAt('Y-m-d') }}<br>
+    {% endif %}
+    </p>
+{% endblock %}
+
 {% block content %}
-    <header>
-        <img src="https://maps.googleapis.com/maps/api/streetview?size=200x200&amp;location={{ roaster.address.coordinates.lat }},{{ roaster.address.coordinates.lon }}&amp;fov=90&amp;heading=235&amp;pitch=10">
-        <address>
-            <h1>{{ roaster.name }}</h1>
-            <p>{{ roaster.address|replace({', ':'<br>'})|raw }}</p>
-        </address>
+    <section class="container-fluid google-maps" id="map-container"></section>
 
-        <div style="display: table-cell">
-            Stiftet: {{ roaster.establishedAt('Y-m-d') }}<br>
-        {% if roaster.invalidatedAt %}
-            Ophørt: {{ roaster.invalidatedAt('Y-m-d') }}<br>
-        {% endif %}
-
-            Links:
-            <a href="{{ roaster.url }}">Website</a>
-            {% for key, url in roaster.feeds %}
-                , <a href="{{ url|toUrl(key) }}">{{ key|capitalize }}</a>
-            {% endfor %}
-        </div>
-    </header>
-
-{% if roaster.feeds|length %}
-    <section>
-        <h2>Seneste fra {{ roaster.name }} på de "sociale":</h2>
-        {% for key, url in roaster.feeds %}
-            <article>
-                <h3><a href="{{ url|toUrl(key) }}">{{ key|capitalize }}</a></h3>
-                {{ render(url(key ~ '-partial', {'token': url|url_encode})) }}
-            </article>
-        {% endfor %}
+    <section class="container-fluid roasters">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ roaster.url }}" title="Til risteriets hjemmeside"><span class="fa fa-bookmark-o"></span> Website</a></li>
+                    {% if roaster.feeds.blog is defined %}
+                        <li><a href="{{ roaster.feeds.blog }}"><span class="fa fa-wordpress"></span> Blog</a></li>
+                    {% endif %}
+                    {% if roaster.feeds.facebook is defined %}
+                        <li><a href="{{ roaster.feeds.facebook|toUrl('facebook') }}"><span class="fa fa-facebook"></span> Facebook</a></li>
+                    {% endif %}
+                    {% if roaster.feeds.twitter is defined %}
+                        <li><a href="{{ roaster.feeds.twitter|toUrl('twitter') }}"><span class="fa fa-twitter"></span> Twitter</a></li>
+                    {% endif %}
+                    {% if roaster.feeds.instagram is defined %}
+                        <li><a href="{{ roaster.feeds.instagram|toUrl('instagram') }}"><span class="fa fa-instagram"></span> Instagram</a></li>
+                    {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </section>
-{% endif %}
 
+    {% if roaster.feeds.instagram is defined %}
+        {{ render(url('instagram-partial', {'token': roaster.feeds.instagram|url_encode})) }}
+    {% endif %}
+
+    {% if roaster.feeds.facebook is defined %}
+        {{ render(url('facebook-partial', {'token': roaster.feeds.facebook|url_encode})) }}
+    {% endif %}
+
+    {% if roaster.feeds.twitter is defined %}
+        {{ render(url('twitter-partial', {'token': roaster.feeds.twitter|url_encode})) }}
+    {% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+
+    <script>
+        var map;
+        var roasters = [
+            {name: '{{ roaster.name }}', lat: {{ roaster.address.coordinates.lat }}, lon: {{ roaster.address.coordinates.lon }}, address: '{{ roaster.address|replace({', ': '<br>'})|raw }}', url: '{{ roaster.url }}'}
+        ];
+
+        function initMap() {
+            var styles = [{featureType: "all", stylers: [{ saturation: -80 }]},{featureType: "road.arterial", elementType: "geometry", stylers: [{ hue: "#422518" }, { saturation: 50 }]},{featureType: "poi.business", elementType: "labels", stylers: [{ visibility: "off" }]}];
+            var styledMap = new google.maps.StyledMapType(styles, {name: "Styled Map"});
+            map = new google.maps.Map(document.getElementById('map-container'), {
+                disableDefaultUI: true,
+                scrollwheel: false,
+                navigationControl: false,
+                mapTypeControl: false,
+                scaleControl: false,
+                draggable: false,
+                mapTypeId: [google.maps.MapTypeId.ROADMAP, 'map_style'],
+                center: {lat: {{ roaster.address.coordinates.lat }}, lng: {{ roaster.address.coordinates.lon }}},
+                zoom: 18
+            });
+            map.mapTypes.set('map_style', styledMap);
+            map.setMapTypeId('map_style');
+            $.each(roasters, function(i, roaster) {
+                var point = new google.maps.LatLng(roaster.lat, roaster.lon);
+                var marker = new google.maps.Marker({position: point, map: map});
+            });
+        }    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCN83anDeWz_fgD8_k8z-yW6chHPX8C-Vw&callback=initMap&language=da"></script>
 {% endblock %}
