@@ -2,9 +2,6 @@
 
 // configure your app for the production environment
 
-$app['r.twig.path']    = [__DIR__.'/../templates'];
-$app['r.twig.options'] = ['cache' => __DIR__.'/../var/cache/twig'];
-
 // twitter stuff
 $app['r.twitter.api_key']    = '';
 $app['r.twitter.api_secret'] = '';

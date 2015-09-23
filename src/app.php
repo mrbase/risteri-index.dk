@@ -21,9 +21,10 @@ $app->register(new UrlGeneratorServiceProvider());
 $app->register(new ValidatorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new TwigServiceProvider(), [
-    'twig.path'    => $app['r.twig.path'],
-    'twig.options' => $app['r.twig.options'],
+    'twig.path'    => [__DIR__.'/../templates'],
+    'twig.options' => $app['debug'] ? [] : ['cache' => __DIR__.'/../var/cache/twig'],
 ]);
+
 $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     // add custom globals, filters, tags, ...
 
