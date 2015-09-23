@@ -6,11 +6,11 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\WebProfilerServiceProvider;
 
 // 3. party
 use Neutron\Silex\Provider\MongoDBODMServiceProvider;
-
-$app = new Application();
 
 // dirs.
 $app['root_dir']  = realpath(__DIR__.'/..');
@@ -20,7 +20,10 @@ $app['log_dir']   = $app['root_dir'].'/var/logs';
 $app->register(new UrlGeneratorServiceProvider());
 $app->register(new ValidatorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
-$app->register(new TwigServiceProvider());
+$app->register(new TwigServiceProvider(), [
+    'twig.path'    => $app['r.twig.path'],
+    'twig.options' => $app['r.twig.options'],
+]);
 $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     // add custom globals, filters, tags, ...
 
@@ -132,11 +135,19 @@ $app->register(new MongoDBODMServiceProvider(), [
     }),
 ]);
 
-// use cache service in prod mode.
 if (false === $app['debug']) {
+    // use cache service in prod mode.
     $app->register(new Silex\Provider\HttpCacheServiceProvider(), [
         'http_cache.cache_dir' => $app['cache_dir'].'/',
     ]);
+} else {
+    $app->register(new MonologServiceProvider(), array(
+        'monolog.logfile' => __DIR__.'/../var/logs/silex_dev.log',
+    ));
+
+    $app->register(new WebProfilerServiceProvider(), array(
+        'profiler.cache_dir' => __DIR__.'/../var/cache/profiler',
+    ));
 }
 
 return $app;

@@ -74,7 +74,11 @@ $app->get('/p/facebook/{token}', function($token) use ($app) {
         return new Response();
     }
 
-    return $app['twig']->render('partials/facebook.html.twig', ['feed' => $response->getDecodedBody()['data']]);
+    $response = new Response($app['twig']->render('partials/facebook.html.twig', ['feed' => $response->getDecodedBody()['data']]));
+    $response->setSharedMaxAge(60*10);
+    $response->setTtl(60*10);
+
+    return $response;
 })->bind('facebook-partial');
 
 
@@ -101,7 +105,11 @@ $app->get('/p/instagram/{token}', function($token) use ($app) {
         ];
     }
 
-    return $app['twig']->render('partials/instagram.html.twig', ['feed' => $images]);
+    $response = new Response($app['twig']->render('partials/instagram.html.twig', ['feed' => $images]));
+    $response->setSharedMaxAge(60*10);
+    $response->setTtl(60*10);
+
+    return $response;
 })->bind('instagram-partial');
 
 
@@ -130,7 +138,11 @@ $app->get('/p/twitter/{token}', function($token) use ($app) {
         ];
     }
 
-    return $app['twig']->render('partials/twitter.html.twig', ['feed' => $tweets]);
+    $response = new Response($app['twig']->render('partials/twitter.html.twig', ['feed' => $tweets]));
+    $response->setSharedMaxAge(60*10);
+    $response->setTtl(60*10);
+
+    return $response;
 })->bind('twitter-partial');
 
 
@@ -190,9 +202,13 @@ $app->get('/om-os', function() use ($app) {
     /** @var \Doctrine\ODM\MongoDB\Query\Builder $qb */
     $rep = $dm->getRepository('Model\Roaster');
 
-    return $app['twig']->render('about.html.twig', [
+    $response = new Response($app['twig']->render('about.html.twig', [
         'roasters' => $rep->findAll(),
-    ]);
+    ]));
+    $response->setSharedMaxAge(60*10);
+    $response->setTtl(60*10);
+
+    return $response;
 })->bind('about');
 
 
