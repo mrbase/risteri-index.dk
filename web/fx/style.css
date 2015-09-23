@@ -145,6 +145,10 @@ header nav ul li a:hover {
 }
 .social.instagram .wrapper img {
     padding-right: 10px;
+    cursor: pointer;
+}
+#instagramModal .modal-dialog {
+    width: 670px;
 }
 .social .item .wrapper p {
     flex: 1;

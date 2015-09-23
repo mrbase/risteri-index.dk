@@ -102,6 +102,7 @@ $app->get('/p/instagram/{token}', function($token) use ($app) {
             'created_time' => $media->created_time,
             'link'         => $media->link,
             'image'        => $media->images->thumbnail,
+            'large_image'  => $media->images->standard_resolution,
         ];
     }
 

@@ -5,7 +5,7 @@
 {% endif %}
     <article class="item col-md-6">
         <div class="wrapper">
-            <img src="{{ item.image.url }}">
+            <img src="{{ item.image.url }}" data-large="{{ item.large_image.url }}">
             <p>
                 <time><a href="{{ item.link }}">{{ item.created_time|date('Y-m-d H:i') }}</a></time>
                 {{ item.caption|linkify('instagram')|nl2br }}
@@ -16,3 +16,18 @@
 </section>
 {% endif %}
 {% endfor %}
+
+<div class="modal" id="instagramModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Luk"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <img src="">
+            </div>
+        </div>
+    </div>
+</div>
+
