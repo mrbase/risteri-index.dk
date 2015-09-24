@@ -7,10 +7,10 @@
     </address>
     <p>
     {% if roaster.establishedAt %}
-        Stiftet: {{ roaster.establishedAt('Y-m-d') }}<br>
+        Stiftet: {{ roaster.establishedAt('j/n Y') }}<br>
     {% endif %}
     {% if roaster.invalidatedAt %}
-        Ophørt: {{ roaster.invalidatedAt('Y-m-d') }}<br>
+        Ophørt: {{ roaster.invalidatedAt('j/n Y') }}<br>
     {% endif %}
     </p>
 {% endblock %}
