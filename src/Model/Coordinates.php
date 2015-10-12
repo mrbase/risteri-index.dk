@@ -75,4 +75,9 @@ class Coordinates
     {
         return $this->lon;
     }
+
+    public function __toString()
+    {
+        return $this->lat.','.$this->lon;
+    }
 }

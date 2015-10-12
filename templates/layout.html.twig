@@ -11,11 +11,11 @@
     <![endif]-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Her finder du en liste over små danske kafferisterier, vi bestræber os på at holde listen up-2-date - med lidt hjælp fra hinanden." />
+    <meta name="description" content="{% block meta_description %}Her finder du en liste over små danske kafferisterier, vi bestræber os på at holde listen up-2-date - med lidt hjælp fra hinanden.{% endblock %}" />
     <meta name="keywords" content="dansk,kaffe,risteri,liste,gourmet">
     <meta property="og:image" content="http://localhost/fx/fb.jpg" />
 
-    <title>DK Roasters</title>
+    <title>{% block header_title %}{% endblock %}DK Roasters</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet" type="text/css">

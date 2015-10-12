@@ -28,7 +28,8 @@
     "facebook/php-sdk-v4": "~5.0",
     "fastfeed/fastfeed": "0.4.*",
     "cosenary/instagram": "~2.3",
-    "ricardoper/twitteroauth": "~2.1"
+    "ricardoper/twitteroauth": "~2.1",
+    "cocur/slugify": "^1.4"
   },
   "autoload": {
     "psr-0": {"": "src/"}

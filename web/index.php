@@ -10,4 +10,8 @@ require __DIR__.'/../config/prod.php';
 require __DIR__.'/../src/app.php';
 require __DIR__.'/../src/controllers.php';
 
-$app->run();
+//$app->run();
+
+\Symfony\Component\HttpFoundation\Request::setTrustedProxies(array('127.0.0.1', '::1'));
+$app['http_cache']->run();
+

@@ -7,7 +7,7 @@
         <div class="wrapper">
             <img src="{{ item.image.url }}" data-large="{{ item.large_image.url }}">
             <p>
-                <time><a href="{{ item.link }}">{{ item.created_time|date('Y-m-d H:i') }}</a></time>
+                <time><a href="{{ item.link }}" title="Check billedet ud på instagram">{{ item.created_time|date('Y-m-d H:i') }}</a></time>
                 {{ item.caption|linkify('instagram')|nl2br }}
             </p>
         </div>

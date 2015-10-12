@@ -10,6 +10,7 @@
 
 namespace Model;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
@@ -34,6 +35,11 @@ class Roaster
      * @MongoDB\String
      */
     private $name;
+
+    /**
+     * @MongoDB\String
+     */
+    private $slug;
 
     /**
      * @MongoDB\String
@@ -132,6 +138,16 @@ class Roaster
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string $slug
+     */
+    public function getSlug()
+    {
+        return $this->slug ?: false;
     }
 
     /**
@@ -467,5 +483,8 @@ class Roaster
         if (empty($this->createdAt)) {
             $this->createdAt = $this->updatedAt;
         }
+
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($this->name);
     }
 }

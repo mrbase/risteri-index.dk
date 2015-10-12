@@ -28,6 +28,19 @@ $app->register(new TwigServiceProvider(), [
 $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     // add custom globals, filters, tags, ...
 
+    $filter = new Twig_SimpleFilter('roasterUrl', function(\Model\Roaster $roaster) use ($app) {
+        if (false === $slug = $roaster->getSlug()) {
+            return $app['url_generator']->generate('view', ['id' => $roaster->getId()]);
+        }
+
+        return $app['url_generator']->generate('roaster', [
+            'countryCode' => strtolower($roaster->getAddress()->getCountryCode()),
+            'slug'        => $roaster->getSlug(),
+        ]);
+    });
+
+    $twig->addFilter($filter);
+
     $filter = new Twig_SimpleFilter('toUrl', function($url, $type) {
         switch ($type) {
             case 'facebook':
@@ -139,7 +152,8 @@ $app->register(new MongoDBODMServiceProvider(), [
 if (false === $app['debug']) {
     // use cache service in prod mode.
     $app->register(new Silex\Provider\HttpCacheServiceProvider(), [
-        'http_cache.cache_dir' => $app['cache_dir'].'/',
+        'http_cache.cache_dir' => $app['cache_dir'].'/http',
+        'http_cache.esi'       => null,
     ]);
 } else {
     $app->register(new MonologServiceProvider(), array(

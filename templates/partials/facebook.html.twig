@@ -13,7 +13,7 @@
         {% endif %}
 
             <p>
-                <time><a href="https://www.facebook.com/{{ item.id }}">{{ item.created_time|date('Y-m-d H:i') }}</a></time>
+                <time><a href="https://www.facebook.com/{{ item.id }}" title="Læs opdateringen fra {{ item.created_time|date('Y-m-d H:i') }} på facebook">{{ item.created_time|date('Y-m-d H:i') }}</a></time>
                 {{ item.message|linkify('facebook', item)|nl2br }}
             </p>
         </div>
@@ -23,7 +23,6 @@
 </section>
 {% endif %}
 {% endfor %}
-
 
 {#
     .item
