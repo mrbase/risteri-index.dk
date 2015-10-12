@@ -537,6 +537,31 @@ $console
     ->setCode(function (InputInterface $input, OutputInterface $output) use ($app, $shops, $thanks) {
         // do something
 
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $app['doctrine.odm.mongodb.dm'];
+        $repo = $dm->getRepository('Model\Roaster');
+
+        /** @var \Model\Roaster $roaster */
+
+        // Copenhagen Roaster
+        $roaster = $repo->find('55f3d116dd3fdf57eb0041a7');
+
+        $roaster->getAddress()->setAddressLine1('Brandstrupvej 10');
+        $roaster->getAddress()->setLocality('Rødovre');
+        $roaster->getAddress()->setPostalCode(2610);
+
+        $dm->persist($roaster);
+
+        // Hipsterbrew
+        $roaster = $repo->find('55f33178dd3fdfb0ca0041ba');
+        $roaster->setEstablishedAt(new DateTime('2015-04-15 12:00:00'));
+
+        $dm->persist($roaster);
+        $dm->flush();
+
+return;
+
+
         $guzzle   = new GuzzleClient(['verify' => true]);
         $geocoder = new GoogleMaps(new Guzzle6HttpAdapter($guzzle), null, null, true, 'AIzaSyDU1YKd8OwCpJYWaD_LyUd7UYefFzn9Sjg');
 
