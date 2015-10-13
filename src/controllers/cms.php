@@ -23,7 +23,8 @@ $app->get('/map', function() use ($app) {
 
 
     $response = new Response($app['twig']->render('google-maps.html.twig', [
-        'roasters' => $rep->findAll(),
+        'roasters'          => $rep->findAll(),
+        'googlemaps_apikey' => $app['r.googlemaps.apikey'],
     ]));
     $response->setSharedMaxAge(60*60*24);
     $response->setTtl(60*60*24);
@@ -42,7 +43,8 @@ $app->get('/om-os', function() use ($app) {
     $rep = $dm->getRepository('Model\Roaster');
 
     $response = new Response($app['twig']->render('about.html.twig', [
-        'roasters' => $rep->findAll(),
+        'roasters'          => $rep->findAll(),
+        'googlemaps_apikey' => $app['r.googlemaps.apikey'],
     ]));
     $response->setSharedMaxAge(60*60*24);
     $response->setTtl(60*60*24);

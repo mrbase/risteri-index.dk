@@ -30,11 +30,14 @@ $app->get('/r/{id}', function($id) use ($app) {
     if (false !== $slug = $roaster->getSlug()) {
         return $app->redirect($app['url_generator']->generate('roaster', [
             'countryCode' => strtolower($roaster->getAddress()->getCountryCode()),
-            'slug'        => $roaster->getSlug()
+            'slug'        => $roaster->getSlug(),
         ]), 301);
     }
 
-    $response = new Response($app['twig']->render('view.html.twig', ['roaster' => $roaster]));
+    $response = new Response($app['twig']->render('view.html.twig', [
+        'roaster' => $roaster,
+        'googlemaps_apikey' => $app['r.googlemaps.apikey'],
+    ]));
     $response->setSharedMaxAge(60*10);
     $response->setTtl(60*10);
 
@@ -58,7 +61,10 @@ $app->get('/{countryCode}/{slug}', function($countryCode, $slug) use ($app) {
         throw new NotFoundHttpException('Risteriet findes ikke.');
     }
 
-    $response = new Response($app['twig']->render('view.html.twig', ['roaster' => $roaster]));
+    $response = new Response($app['twig']->render('view.html.twig', [
+        'roaster'           => $roaster,
+        'googlemaps_apikey' => $app['r.googlemaps.apikey'],
+    ]));
     $response->setSharedMaxAge(60*10);
     $response->setTtl(60*10);
 
