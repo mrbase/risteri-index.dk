@@ -2,7 +2,7 @@
     <div class="wrapper">
         <h2><a href="{{ item.url }}" target="_blank" title="Gå til {{ item.name }}'s website">{{ item.name }}</a></h2>
         <address><a href="https://www.google.dk/maps/place?q={{ item.name|url_encode(true) }},{{ item.address|url_encode(true) }},dk" target="_blank" data-toggle="modal" data-target="#myModal" title="{{ item.name }} på Google maps">{{ item.address|replace({', ':'<br>'})|raw }}</a></address>
-        <div class="credit"><a href="{{ item|roasterUrl }}">Mere info</a></div>
+        <div class="credit"><a href="{{ item|roasterUrl }}" title="Yderligere oplysninger om {{ item.name }}">Mere info</a></div>
     </div>
 </article>
 
