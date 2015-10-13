@@ -21,7 +21,7 @@ $console
         // new InputOption('some-option', null, InputOption::VALUE_NONE, 'Some help'),
     ))
     ->setDescription('My command description')
-    ->setCode(function (InputInterface $input, OutputInterface $output) use ($app, $shops, $thanks) {
+    ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
         // do something
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -30,12 +30,17 @@ $console
 
         /** @var \Model\Roaster $roaster */
 
-        // Copenhagen Roaster
-        $roaster = $repo->find('55f3d116dd3fdf57eb0041a7');
-        $roaster->setUrl('http://chokocom.com/kaffe-2');
-        $dm->persist($roaster);
+        foreach($repo->findAll() as $roaster) {
+            $roaster->setSlug();
+            $dm->persist($roaster);
+        }
 
-        $dm->persist($roaster);
+        // Copenhagen Roaster
+//        $roaster = $repo->find('55f3d116dd3fdf57eb0041a7');
+//        $roaster->setUrl('http://chokocom.com/kaffe-2');
+//        $dm->persist($roaster);
+
+
         $dm->flush();
 
 return;
