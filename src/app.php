@@ -25,8 +25,9 @@ $app->register(new TwigServiceProvider(), [
     'twig.options' => $app['debug'] ? [] : ['cache' => __DIR__.'/../var/cache/twig'],
 ]);
 
-$app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
+$app['twig'] = $app->share($app->extend('twig', function (Twig_Environment $twig, $app) {
     // add custom globals, filters, tags, ...
+    $twig->addGlobal('debug', $app['debug']);
 
     $filter = new Twig_SimpleFilter('roasterUrl', function(\Model\Roaster $roaster) use ($app) {
         if (false === $slug = $roaster->getSlug()) {
@@ -147,6 +148,17 @@ $app->register(new MongoDBODMServiceProvider(), [
 
         $app['monolog']->debug('MongoDB query.', $query);
     }),
+]);
+
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), [
+    'swiftmailer.options' => [
+        'host'       => $app['r.swiftmailer.host'],
+        'port'       => $app['r.swiftmailer.port'],
+        'username'   => $app['r.swiftmailer.username'],
+        'password'   => $app['r.swiftmailer.password'],
+        'encryption' => $app['r.swiftmailer.encryption'],
+        'auth_mode'  => $app['r.swiftmailer.auth_mode'],
+    ],
 ]);
 
 if (false === $app['debug']) {

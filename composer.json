@@ -29,7 +29,8 @@
     "fastfeed/fastfeed": "0.4.*",
     "cosenary/instagram": "~2.3",
     "ricardoper/twitteroauth": "~2.1",
-    "cocur/slugify": "^1.4"
+    "cocur/slugify": "^1.4",
+    "swiftmailer/swiftmailer": "^5.4"
   },
   "autoload": {
     "psr-0": {"": "src/"}

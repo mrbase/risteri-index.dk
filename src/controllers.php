@@ -24,8 +24,10 @@ $app->get('/', function () use ($app) {
     }
 
     $response = new Response($app['twig']->render('index.html.twig', [
-        'roasters' => $roasters,
-        'tags'  => $tags
+        'roasters'          => $roasters,
+        'tags'              => $tags,
+        'recaptcha_sitekey' => $app['r.recaptcha.sitekey'],
+        'googlemaps_apikey' => $app['r.googlemaps.apikey'],
     ]));
 
     // cache for 24 hours
@@ -36,8 +38,9 @@ $app->get('/', function () use ($app) {
 })->bind('home');
 
 require __DIR__.'/controllers/cms.php';
-require __DIR__.'/controllers/roasters.php';
+require __DIR__.'/controllers/feedback.php';
 require __DIR__.'/controllers/partials.php';
+require __DIR__.'/controllers/roasters.php';
 
 /**
  * Error handling
