@@ -140,15 +140,6 @@ class Roaster
         return $this->name;
     }
 
-    public function setSlug()
-    {
-        $slugify = new Slugify();
-        $this->slug = $slugify->slugify($this->name);
-
-        return $this;
-    }
-
-
     /**
      * Get slug
      *

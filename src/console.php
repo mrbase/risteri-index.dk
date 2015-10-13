@@ -30,15 +30,10 @@ $console
 
         /** @var \Model\Roaster $roaster */
 
-        foreach($repo->findAll() as $roaster) {
-            $roaster->setSlug();
-            $dm->persist($roaster);
-        }
-
         // Copenhagen Roaster
-//        $roaster = $repo->find('55f3d116dd3fdf57eb0041a7');
-//        $roaster->setUrl('http://chokocom.com/kaffe-2');
-//        $dm->persist($roaster);
+        $roaster = $repo->find('55f3d116dd3fdf57eb0041a7');
+        $roaster->setUrl('http://chokocom.com/kaffe-2');
+        $dm->persist($roaster);
 
 
         $dm->flush();
