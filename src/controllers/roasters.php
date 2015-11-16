@@ -91,7 +91,6 @@ $app->get('/geo-sort', function(Request $request) use ($app) {
             ])
             ->spherical(true)
             ->distanceMultiplier(6378.137)
-
             ->getQuery()
             ->execute();
     } catch (\Exception $e) {
