@@ -23,6 +23,9 @@ $console
     ->setDescription('My command description')
     ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
         // do something
+        $guzzle   = new GuzzleClient(['verify' => true]);
+        #$geocoder = new GoogleMaps(new Guzzle6HttpAdapter($guzzle), null, null, true, 'AIzaSyDU1YKd8OwCpJYWaD_LyUd7UYefFzn9Sjg');
+        $geocoder = new GoogleMaps(new Guzzle6HttpAdapter($guzzle));
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $app['doctrine.odm.mongodb.dm'];
@@ -31,8 +34,22 @@ $console
         /** @var \Model\Roaster $roaster */
 
         // Copenhagen Roaster
-        $roaster = $repo->find('55f3d116dd3fdf57eb0041a7');
-        $roaster->setUrl('http://chokocom.com/kaffe-2');
+        $roaster = $repo->find('55f3317add3fdfb0ca0041c5');
+	$address = $roaster->getAddress();
+	$address->setLocality('Vejle');
+	$address->setPostalCode(7100);
+	$address->setAddressLine1('Nørregade 63');
+
+        $geo = $geocoder->geocode($address.', denmark');
+        $geo = $geo->first();
+
+        $c = new Model\Coordinates();
+        $c->setLat($geo->getLatitude());
+        $c->setLon($geo->getLongitude());
+
+        $address->setCoordinates($c);
+
+        #$roaster->setUrl('http://chokocom.com/kaffe-2');
         $dm->persist($roaster);
 
 
@@ -132,6 +149,100 @@ print_r($geo);exit;
             $dm->persist($r);
         }
 
+        $dm->flush();
+    })
+;
+
+$console
+    ->register('roaster:add')
+    ->setDefinition(array(
+        new InputArgument('json', InputArgument::REQUIRED, 'Json object with roaster data.'),
+    ))
+    ->setDescription('Create new roaster')
+    ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
+        $shop = json_decode($input->getArgument('json'), true);
+
+        $guzzle   = new GuzzleClient(['verify' => true]);
+        #$geocoder = new GoogleMaps(new Guzzle6HttpAdapter($guzzle), null, null, true, 'AIzaSyDU1YKd8OwCpJYWaD_LyUd7UYefFzn9Sjg');
+        $geocoder = new GoogleMaps(new Guzzle6HttpAdapter($guzzle));
+
+        $dm = $app['doctrine.odm.mongodb.dm'];
+
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $qb */
+        $qb = $dm->createQueryBuilder('Model\Roaster');
+
+        $count = $qb->field('url')->equals($shop['url'])
+            ->hydrate(false)
+            ->getQuery()
+            ->count();
+
+        $r = new Model\Roaster();
+        $r->setName($shop['name']);
+        $r->setUrl($shop['url']);
+
+        if (isset($shop['cvr'])) {
+            $r->setRegistrationNumber($shop['cvr']);
+
+            try {
+                $response = $guzzle->get('http://cvrapi.dk/api?vat='.$shop['cvr'].'&country=dk');
+
+                $data = json_decode($response->getBody()->getContents(), true);
+                $time = DateTime::createFromFormat('d/m - Y', $data['startdate'], new DateTimeZone('Europe/Copenhagen'));
+
+                $r->setEstablishedAt($time);
+
+                if (!is_null($data['enddate'])) {
+                    $time = DateTime::createFromFormat('d/m - Y', $data['enddate'], new DateTimeZone('Europe/Copenhagen'));
+                    $r->setInvalidatedAt($time);
+                }
+            } catch (\Exception $e) {
+                $output->writeln('cvrapi error: '.$shop['cvr']);
+            }
+        } elseif (isset($shop['startdate'])) {
+            $r->setInvalidatedAt(new DateTime($shop['startdate']));
+        }
+
+        $geo = $geocoder->geocode($shop['address'].', denmark');
+        $geo = $geo->first();
+        
+        $a = new Model\Address();
+        $a->setAddressLine1($geo->getStreetName().' '.$geo->getStreetNumber());
+        $a->setPostalCode($geo->getPostalCode());
+        $a->setLocality($geo->getLocality());
+        $a->setCountryCode($geo->getCountryCode());
+        $a->setLocale('da');
+
+        $c = new Model\Coordinates();
+        $c->setLat($geo->getLatitude());
+        $c->setLon($geo->getLongitude());
+
+        $a->setCoordinates($c);
+        $r->setAddress($a);
+
+        if (isset($shop['thanks'])) {
+            foreach ($shop['thanks'] as $key) {
+                $c = new Model\Credit();
+                $c->setName($key['name']);
+                $c->setSource($key['url']);
+                $r->addCredit($c);
+            }
+        }
+        $r->setTags($shop['tags']);
+
+        if (isset($shop['facebook'])) {
+            $r->addFeed('facebook', $shop['facebook']);
+        }
+        if (isset($shop['twitter'])) {
+            $r->addFeed('twitter', $shop['twitter']);
+        }
+        if (isset($shop['instagram'])) {
+            $r->addFeed('instagram', $shop['instagram']);
+        }
+        if (isset($shop['blog'])) {
+            $r->addFeed('blog', $shop['blog']);
+        }
+        
+        $dm->persist($r);
         $dm->flush();
     })
 ;
