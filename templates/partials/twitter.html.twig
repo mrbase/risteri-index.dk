@@ -1,8 +1,8 @@
 {% for item in feed %}
-{% if loop.first %}
-<h3 class="container-fluid">Seneste {{ loop.length }} Tweets</h3>
-<section class="container-fluid social twitter">
-{% endif %}
+    {% if loop.first %}
+    <h3 class="container-fluid">Seneste {{ loop.length }} Tweets</h3>
+    <section class="container-fluid social twitter">
+    {% endif %}
     <article class="item col-md-6">
         <div class="wrapper">
             <p>
@@ -11,7 +11,7 @@
             </p>
         </div>
     </article>
-{% if loop.last %}
-</section>
-{% endif %}
+    {% if loop.last %}
+    </section>
+    {% endif %}
 {% endfor %}

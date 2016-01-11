@@ -19,3 +19,22 @@ $app['r.facebook.app_secret'] = '';
 // mongodb stuff
 $app['r.mongodb.host']     = '';
 $app['r.mongodb.database'] = '';
+
+// reCAPTCHA stuff
+$app['r.recaptcha.sitekey'] = '';
+$app['r.recaptcha.secret']  = '';
+
+// google maps stuff
+$app['r.googlemaps.apikey'] = '';
+
+// mail stuff
+$app['r.swiftmailer.host']       = 'localhost';
+$app['r.swiftmailer.port']       = '25';
+$app['r.swiftmailer.username']   = '';
+$app['r.swiftmailer.password']   = '';
+$app['r.swiftmailer.encryption'] = null;
+$app['r.swiftmailer.auth_mode']  = null;
+
+// feedback mail options
+$app['r.feedback.mail.from'] = [''];
+$app['r.feedback.mail.to']   = [''];
