@@ -12,9 +12,93 @@ use GuzzleHttp\Client as GuzzleClient;
 use Geocoder\Provider\GoogleMaps;
 use Ivory\HttpAdapter\Guzzle6HttpAdapter;
 
-$console = new Application('My Silex Application', 'n/a');
+$console = new Application('Roaser CLI', '0/1');
 $console->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev'));
 $console->setDispatcher($app['dispatcher']);
+
+$console
+    ->register('nff')
+    ->setDescription('Create new roaster from json file.')
+    ->setDefinition([
+        new InputArgument('file', InputArgument::REQUIRED, 'File path')
+    ])
+    ->setCode(function(InputInterface $input, OutputInterface $output) use ($app) {
+        $data = file_get_contents($input->getArgument('file'));
+        $data = json_decode($data, true);
+
+        $guzzle   = new GuzzleClient(['verify' => true]);
+        $geocoder = new GoogleMaps(new Guzzle6HttpAdapter($guzzle));
+        //$geocoder = new GoogleMaps(new Guzzle6HttpAdapter($guzzle), null, null, true, 'AIzaSyDU1YKd8OwCpJYWaD_LyUd7UYefFzn9Sjg');
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $app['doctrine.odm.mongodb.dm'];
+        $repo = $dm->getRepository('Model\Roaster');
+
+        // /** @var \Doctrine\ODM\MongoDB\Query\Builder $qb */
+        // $qb = $dm->createQueryBuilder('Model\Roaster');
+        //
+        // $count = $qb->field('url')->equals($data['url'])
+        //     ->hydrate(false)
+        //     ->getQuery()
+        //     ->count();
+        //
+        // if ($count) {
+        //     $output->writeln('Roaster already in DB!');
+        //     exit;
+        // }
+
+        $r = new Model\Roaster();
+        $r->setName($data['name']);
+        $r->setUrl($data['url']);
+
+        $address = $data['address'].', '.$data['zip'].' '.$data['city'];
+        $geo = $geocoder->geocode($address.', denmark');
+        $geo = $geo->first();
+
+        $a = new Model\Address();
+        $a->setAddressLine1($geo->getStreetName().' '.$geo->getStreetNumber());
+        $a->setPostalCode($geo->getPostalCode());
+        $a->setLocality($geo->getLocality());
+        $a->setCountryCode($geo->getCountryCode());
+        $a->setLocale('da');
+
+        $c = new Model\Coordinates();
+        $c->setLat($geo->getLatitude());
+        $c->setLon($geo->getLongitude());
+
+        $a->setCoordinates($c);
+        $r->setAddress($a);
+
+        if (isset($data['cvr'])) {
+            $r->setRegistrationNumber($data['cvr']);
+
+            if (isset($data['startdate'])) {
+                $time = DateTime::createFromFormat('m/d - Y', $data['startdate'], new DateTimeZone('Europe/Copenhagen'));
+                $r->setEstablishedAt($time);
+            }
+        }
+
+        if (isset($data['facebook'])) {
+            $r->addFeed('facebook', $data['facebook']);
+        }
+        if (isset($data['twitter'])) {
+            $r->addFeed('twitter', $data['twitter']);
+        }
+        if (isset($data['instagram'])) {
+            $r->addFeed('instagram', $data['instagram']);
+        }
+        if (isset($data['blog'])) {
+            $r->addFeed('blog', $data['blog']);
+        }
+
+//print_r($r);exit;
+        $dm->persist($r);
+        $dm->flush();
+
+        $output->writeln('"'.$data['name'].'" now created.');
+    })
+;
+
 $console
     ->register('my-command')
     ->setDefinition(array(
