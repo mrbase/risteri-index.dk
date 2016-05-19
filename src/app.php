@@ -150,16 +150,17 @@ $app->register(new MongoDBODMServiceProvider(), [
     }),
 ]);
 
-$app->register(new Silex\Provider\SwiftmailerServiceProvider(), [
-    'swiftmailer.options' => [
-        'host'       => $app['r.swiftmailer.host'],
-        'port'       => $app['r.swiftmailer.port'],
-        'username'   => $app['r.swiftmailer.username'],
-        'password'   => $app['r.swiftmailer.password'],
-        'encryption' => $app['r.swiftmailer.encryption'],
-        'auth_mode'  => $app['r.swiftmailer.auth_mode'],
-    ],
-]);
+$app->register(new Silex\Provider\SwiftmailerServiceProvider());
+// $app->register(new Silex\Provider\SwiftmailerServiceProvider(), [
+//     'swiftmailer.options' => [
+//         'host'       => $app['r.swiftmailer.host'],
+//         'port'       => $app['r.swiftmailer.port'],
+//         'username'   => $app['r.swiftmailer.username'],
+//         'password'   => $app['r.swiftmailer.password'],
+//         'encryption' => $app['r.swiftmailer.encryption'],
+//         'auth_mode'  => $app['r.swiftmailer.auth_mode'],
+//     ],
+// ]);
 
 if (false === $app['debug']) {
     // use cache service in prod mode.
