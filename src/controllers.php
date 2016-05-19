@@ -19,7 +19,10 @@ $app->get('/', function () use ($app) {
 
     $tags = [];
     foreach ($roasters as $shop) {
-        $tag = $shop->getTags()[0];
+        $tag = $shop->getTags();
+        if ($tag) {
+            $tag = $tag[0];
+        }
         $tags[$tag] = ucfirst($tag);
     }
 
