@@ -6,6 +6,27 @@ ulrik/risteri-index-dk:
         - WEBOWNER: "www-data"
         - APPDIR: "risteri-index-dk"
 
+    PreBuild:
+        - sudo apt-get -y update
+        - sudo apt-get -y install git
+        - sudo apt-get -y install build-dep php5
+        - sudo apt-get -y install libmcrypt-dev libreadline-dev
+        - sudo apt-get -y install php5-curl php5-mongo php5-intl
+
+        - git clone https://github.com/CHH/phpenv.git
+        - phpenv/bin/phpenv-install.sh
+        - export PATH="~/.phpenv/bin:$PATH"
+        - eval "$(phpenv init -)"
+
+        - git clone https://github.com/php-build/php-build.git
+        - sudo php-build/install.sh
+
+        - php-build -i development 5.6.20 ~/.phpenv/versions/5.6.20
+        - phpenv rehash
+        - phpenv versions
+        - phpenv global 5.6.20
+        - php --version
+
     # Build the actual prod package
     Build:
         - echo "Build fase."
