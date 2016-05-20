@@ -1,0 +1,65 @@
+ulrik/risteri-index-dk:
+    # Enviroment variables - should not contain
+    # passwords, access and/or secret keys.
+    Env:
+        - WEBDIR: "/var/www"
+        - WEBOWNER: "www-data"
+        - APPDIR: "risteri-index-dk"
+
+    # Build the actual prod package
+    Build:
+        - echo "Build fase."
+        - export SYMFONY_ENV=prod
+
+        - echo "Setting up parameters file.."
+        - cp /var/www/shared/risteri-index-dk-prod.php config/prod.php
+
+        - echo "Running composer install for prod"
+        - composer install --no-dev --optimize-autoloader --quiet
+
+    PkgExclude:
+        - README.md
+        - phpunit.xml.dist
+        - distelli-manifest.yml
+        - composer.json
+        - composer.lock
+
+    PkgInclude:
+        - '*'
+
+    # PostInstall swaps symlinks to current version.
+    PostInstall:
+        - echo "PostInstall"
+
+        - echo "Checking to see if $WEBDIR/$APPDIR exists."
+        - if [ -d $WEBDIR/$APPDIR ]; then
+        -   echo "$WEBDIR/$APPDIR exists, removing symbolic link."
+        -   sudo rm -rf $WEBDIR/$APPDIR
+        - else
+        -   echo "$WEBDIR/$APPDIR does not exist."
+        - fi
+
+        - echo "Linking $DISTELLI_APPHOME to the $WEBDIR/$APPDIR directory."
+        - sudo ln -sf $DISTELLI_APPHOME $WEBDIR/$APPDIR
+
+        - echo "Changing ownership to $WEBOWNER for nginx."
+        - sudo chown -R $WEBOWNER:$WEBOWNER *
+
+    PreRestart:
+        - echo "PreRestart"
+
+        - echo "Restarting nginx service. This is performed during Distelli Restart task."
+        - sudo service nginx restart
+
+    Terminate:
+        - echo "Terminate"
+
+        - echo "Checking to see if $WEBDIR/$APPDIR exists."
+        - if [ -d $WEBDIR/$APPDIR ]; then
+        -   echo "$WEBDIR/$APPDIR exists, removing symbolic link."
+        -   sudo rm -rf $WEBDIR/$APPDIR
+        - else
+        -   echo "$WEBDIR/$APPDIR does not exist."
+        - fi
+        - echo "Restarting nginx service. This is an example and it is not necessary to restart Apache2 to see the removed content."
+        - sudo service nginx restart
