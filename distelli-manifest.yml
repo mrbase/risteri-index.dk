@@ -11,9 +11,6 @@ ulrik/risteri-index-dk:
         - echo "Build fase."
         - export SYMFONY_ENV=prod
 
-        - echo "Setting up parameters file.."
-        - cp /var/www/shared/risteri-index-dk-prod.php config/prod.php
-
         - echo "Running composer install for prod."
         - php5 /usr/local/bin/composer install --no-dev --optimize-autoloader
 
@@ -41,6 +38,9 @@ ulrik/risteri-index-dk:
 
         - echo "Linking $DISTELLI_APPHOME to the $WEBDIR/$APPDIR directory."
         - sudo ln -sf $DISTELLI_APPHOME $WEBDIR/$APPDIR
+
+        - echo "Setting up parameters file.."
+        - cp /var/www/shared/risteri-index-dk-prod.php $WEBDIR/$APPDIR/config/prod.php
 
         - echo "Changing ownership to $WEBOWNER for nginx."
         - sudo chown -R $WEBOWNER:$WEBOWNER *
