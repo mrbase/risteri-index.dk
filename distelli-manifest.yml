@@ -14,7 +14,7 @@ ulrik/risteri-index-dk:
         - echo "Setting up parameters file.."
         - cp /var/www/shared/risteri-index-dk-prod.php config/prod.php
 
-        - echo "Running composer install for prod"
+        - echo "Running composer install for prod."
         - php5 /usr/local/bin/composer install --no-dev --optimize-autoloader
 
     PkgExclude:
