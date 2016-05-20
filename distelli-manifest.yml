@@ -15,7 +15,7 @@ ulrik/risteri-index-dk:
         - cp /var/www/shared/risteri-index-dk-prod.php config/prod.php
 
         - echo "Running composer install for prod"
-        - composer install --no-dev --optimize-autoloader --quiet
+        - php5 /usr/local/bin/composer install --no-dev --optimize-autoloader
 
     PkgExclude:
         - README.md
