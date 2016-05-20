@@ -8,7 +8,10 @@ ulrik/risteri-index-dk:
 
     PreBuild:
         - sudo apt-get -y update -q
-        - sudo apt-get -y install git libmcrypt-dev libreadline-dev php5 php5-curl php5-mongo php5-intl
+        - sudo apt-get -y install git libmcrypt-dev libreadline-dev php5 php5-curl php5-intl
+        - sudo apt-get -y install php5-dev make php-pear
+        - sudo pecl install mongo
+        - sudo echo "extension=mongo.so" | sudo tee /etc/php5/cli/mongo.ini
 
         - git clone https://github.com/CHH/phpenv.git
         - phpenv/bin/phpenv-install.sh
