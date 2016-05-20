@@ -7,11 +7,8 @@ ulrik/risteri-index-dk:
         - APPDIR: "risteri-index-dk"
 
     PreBuild:
-        - sudo apt-get -y update
-        - sudo apt-get -y install git
-        - sudo apt-get -y install build-dep php5
-        - sudo apt-get -y install libmcrypt-dev libreadline-dev
-        - sudo apt-get -y install php5-curl php5-mongo php5-intl
+        - sudo apt-get -y update -q
+        - sudo apt-get -y install git libmcrypt-dev libreadline-dev php5 php5-curl php5-mongo php5-intl
 
         - git clone https://github.com/CHH/phpenv.git
         - phpenv/bin/phpenv-install.sh
