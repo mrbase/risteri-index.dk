@@ -6,38 +6,16 @@ ulrik/risteri-index-dk:
         - WEBOWNER: "www-data"
         - APPDIR: "risteri-index-dk"
 
-    PreBuild:
-        - sudo apt-get -y update -q
-        - sudo apt-get -y install git libmcrypt-dev libreadline-dev php5 php5-curl php5-intl
-        - sudo apt-get -y install php5-dev make php-pear
-        - sudo pecl install mongo
-
-        - sudo echo "extension=mongo.so" | sudo tee /etc/php5/cli/mongo.ini
-
-        - git clone https://github.com/CHH/phpenv.git
-        - phpenv/bin/phpenv-install.sh
-        - export PATH="~/.phpenv/bin:$PATH"
-        - eval "$(phpenv init -)"
-
-        - git clone https://github.com/php-build/php-build.git
-        - sudo php-build/install.sh
-
-        - php-build -i development 5.6.20 ~/.phpenv/versions/5.6.20
-        - phpenv rehash
-        - phpenv versions
-        - phpenv global 5.6.20
-        - php --version
-
-        - curl -sS https://getcomposer.org/installer | php
-
     # Build the actual prod package
     Build:
         - echo "Build fase."
         - export SYMFONY_ENV=prod
 
+        - echo "Setting up parameters file.."
+        - cp /var/www/shared/risteri-index-dk-prod.php config/prod.php
+
         - echo "Running composer install for prod."
-        - php composer.phar install --no-dev --optimize-autoloader
-        #- php5 /usr/local/bin/composer install --no-dev --optimize-autoloader
+        - php5 /usr/local/bin/composer install --no-dev --optimize-autoloader
 
     PkgExclude:
         - README.md
@@ -63,9 +41,6 @@ ulrik/risteri-index-dk:
 
         - echo "Linking $DISTELLI_APPHOME to the $WEBDIR/$APPDIR directory."
         - sudo ln -sf $DISTELLI_APPHOME $WEBDIR/$APPDIR
-
-        - echo "Setting up parameters file.."
-        - cp /var/www/shared/risteri-index-dk-prod.php $WEBDIR/$APPDIR/config/prod.php
 
         - echo "Changing ownership to $WEBOWNER for nginx."
         - sudo chown -R $WEBOWNER:$WEBOWNER *
